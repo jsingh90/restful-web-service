@@ -2,9 +2,11 @@ package com.java.spring.restfulwebservices.users.exceptions;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,4 +33,16 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 		
 		return new ResponseEntity(response, HttpStatus.NOT_FOUND);
 	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		ExceptionResponse response = new ExceptionResponse(LocalDateTime.now(), 
+											"Validation Failed", 
+											ex.getBindingResult().getAllErrors().toString());
+		
+		return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+	}
+
 }

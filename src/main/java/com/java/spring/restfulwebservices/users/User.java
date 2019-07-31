@@ -3,9 +3,17 @@ package com.java.spring.restfulwebservices.users;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
 public class User {
+	
 	private Integer id;
+	
+	@Size(min = 2, message = "Name should have 2 characters")
 	private String name;
+	
+	@Past(message = "Date of birth should be past date")
 	private LocalDateTime dob;
 	
 	public User(Integer id, String name, LocalDateTime dob) {

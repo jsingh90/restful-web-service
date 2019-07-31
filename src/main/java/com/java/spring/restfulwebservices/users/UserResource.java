@@ -3,7 +3,13 @@ package com.java.spring.restfulwebservices.users;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +24,7 @@ import com.java.spring.restfulwebservices.users.exceptions.UserNotFoundException
 
 @RestController
 public class UserResource {
+	
 	
 	
 	@Autowired
@@ -36,11 +43,16 @@ public class UserResource {
 			throw new UserNotFoundException(String.format("id - %d", id));
 		}
 		
+		
+//		EntityModel<User> model = new EntityModel<>(user);
+//	    WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).reteriveAllUsers());
+//	    model.add(linkTo.withRel("all-users"));
+	    
 		return user;
 	}
 	
 	@PostMapping(path = "/users")
-	public ResponseEntity createUser(@RequestBody User user) {
+	public ResponseEntity createUser(@Valid @RequestBody User user) {
 		User savedUser = service.save(user);
 		
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
